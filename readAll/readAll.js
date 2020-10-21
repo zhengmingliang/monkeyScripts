@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         阅读全文
 // @namespace    http://tampermonkey.net/
-// @version      0.1
-// @description  【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io
+// @version      0.3
+// @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io
 // @author       zhengmingliang
 // @match        https://blog.csdn.net/*
 // @match        *://*.github.io/*
@@ -16,7 +16,7 @@
     // csdn
     if (href.indexOf('csdn') != -1) {
         console.log("检测到CSDN。。。。")
-        if ($("#btn-readmore-zk").length > 0) {
+        if ($("#btn-readmore-zk").length > 0) {  // 已登录
             console.log("检测到有阅读全文关注限制。。。。")
             // 移除阅读全文
             $("#btn-readmore-zk").parent().remove();
@@ -25,6 +25,12 @@
             // 优化后：直接将style置为空
             $("#article_content").prop('style', '')
             console.log("已解除阅读全文关注限制。。。。")
+        }else if($(".btn-readmore").length > 0){ // 未登录
+            $(".btn-readmore").parent().remove();
+            // 使滚动条可见
+            // $("#article_content").css('overflow','auto')
+            // 优化后：直接将style置为空
+            $("#article_content").prop('style', '')
         }
     } else if (href.indexOf('github.io') != -1) {
         console.log("检测到github.io。。。。")

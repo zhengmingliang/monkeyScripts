@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         阅读全文
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com
 // @author       zhengmingliang
 // @match        https://blog.csdn.net/*
@@ -41,6 +41,8 @@
         readAllRule1("#btn-readmore-zk","#article_content")
         // 未登录
         readAllRule1(".btn-readmore","#article_content")
+        // 移动端处理
+        readAllRule1(".btn_mod","#article_content")
 
     } else if (href.indexOf('github.io') != -1) { //hoxis.github.io
         console.log("检测到github.io。。。。")

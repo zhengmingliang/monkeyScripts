@@ -15,7 +15,7 @@
 * 将隐藏的文章内容的样式移除掉或修改掉
 
 ### 新增网站反馈 
-* [github](https://github.com/zhengmingliang/monkeyScripts/issues/new?assignees=zhengmingliang&labels=help+wanted&template=support-read-all-template.md&title=)
+* [github反馈](https://github.com/zhengmingliang/monkeyScripts/issues/new?assignees=zhengmingliang&labels=help+wanted&template=support-read-all-template.md&title=)
 * 反馈邮箱：zml@alianga.com
 
 ### 目前支持的网站

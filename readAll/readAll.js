@@ -1,12 +1,15 @@
 // ==UserScript==
 // @name         阅读全文
 // @namespace    http://tampermonkey.net/
-// @version      1.1
-// @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com
+// @version      1.2
+// @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com
 // @author       zhengmingliang
 // @match        https://blog.csdn.net/*
 // @match        *://*.github.io/*
 // @match        *://*.xz577.com/*
+// @match        *://*.iteye.com/*
+// @match        *://*.720ui.com/*
+// @match        *://cloud.tencent.com/*
 // @grant        none
 // ==/UserScript==
 

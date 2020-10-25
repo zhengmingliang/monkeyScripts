@@ -22,4 +22,7 @@
 * CSDN
 * github.io
 * xz577.com
+* cloud.tencent.com
+* iteye.com
+* 720ui.com
 * 持续支持中...

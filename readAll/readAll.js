@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         阅读全文
 // @namespace    http://tampermonkey.net/
-// @version      1.4
+// @version      1.5
 // @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com
 // @author       zhengmingliang
 // @match        https://blog.csdn.net/*
@@ -214,10 +214,11 @@
         readAllRule4(".info");
     }else if(href.indexOf("iocoder") != -1){
         setInterval(removeAlertRule1(),10000);
-    }else {
+    }else if(href.indexOf("javazhiyin") != -1){
         // 每隔10s移除弹出的关注检测弹框
-        if ($(".layui-layer-page").length > 0) {
-            setInterval(removeFirstLayer(), 10000)
-        }
+        setInterval(removeFirstLayer(), 10000)
+    }else {
+
+
     }
 })();

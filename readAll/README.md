@@ -20,9 +20,17 @@
 
 ### 目前支持的网站
 * CSDN
-* github.io
-* xz577.com
 * cloud.tencent.com
 * iteye.com
-* 720ui.com
+* 所有使用openwrite.cn推广公众号的个人博客
+    * blog.720ui.com
+    * 程序员DD blog.didispace.com
+    * hoxis.github.io
+    * itmuch.com
+    * 54tianzhisheng.cn
+    * ...
+* 其他个人博客
+    * xz577.com
+    * Java技术驿站 cmsblogs.com
+    * 芋道源码 www.iocoder.cn
 * 持续支持中...

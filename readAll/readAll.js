@@ -153,12 +153,30 @@
 
     }
 
+    function removeAlertRule1(){
+        $("div[style]").each(function (index) {
+            let attr = $(this).attr('style');
+            let text = $(this).text();
+            if (attr.indexOf("z-index")!= -1 && (text.indexOf("首次访问")!= -1 || text.indexOf("人机检测") != -1)) {
+                let zIndex = $(this).css("z-index");
+                console.log("zIndex:", zIndex)
+                let lastDiv = $("div[style]").filter(function () {
+                    return $(this).attr('style').indexOf("z-index") != -1 && $(this).css("z-index") == zIndex -1
+                })
+                console.log("lastDiv:",lastDiv)
+                if(lastDiv && lastDiv.length > 0){
+                    lastDiv.remove();
+                }
+                $(this).remove();
+                $('body').css("overflow",'auto');
+            }
+
+        })
+    }
 
     var $ = $ || window.$;
     var href = window.location.href
 
-    // 每隔10s移除弹出的关注检测弹框
-    setInterval(removeFirstLayer(), 10000)
 // csdn
     if (href.indexOf('csdn') != -1) {
         console.log("检测到CSDN。。。。")
@@ -192,7 +210,14 @@
         console.log("检测到可能使用了openwrite推广工具。。。。")
         readAllRule4("#read-more-btn");
     } else if ($(".mask").length > 0 && $(".info").length > 0) { // cmsblogs.com
-        console.log("检测到cmsblogs.com。。。。")
+        console.log("检测到%s。。。。",href)
         readAllRule4(".info");
+    }else if(href.indexOf("iocoder") != -1){
+        setInterval(removeAlertRule1(),10000);
+    }else {
+        // 每隔10s移除弹出的关注检测弹框
+        if ($(".layui-layer-page").length > 0) {
+            setInterval(removeFirstLayer(), 10000)
+        }
     }
 })();

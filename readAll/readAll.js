@@ -13,6 +13,7 @@
 // @match        *://cloud.tencent.com/*
 // @match        *://*.didispace.com/*
 // @match        *://*.sina.cn/*
+// @match        *://*.toutiao.com/*
 
 // @grant        none
 // ==/UserScript==
@@ -33,43 +34,44 @@
             // 使滚动条可见
             // $("#article_content").css('overflow','auto')
             // 优化后：直接将style置为空
-            console.log("style:%s",$(contentSelector).prop('style'))
+            console.log("style:%s", $(contentSelector).prop('style'))
             $(contentSelector).prop('style', '')
             $(contentSelector).attr('style', '')
             console.log("已解除阅读全文关注限制。。。。")
         }
     }
+
     /**
      * 阅读全文 规则1(openwrite.cn 插件规则)
      * @param readMoreSelector
      * @param contentSelector
      */
     function readAllRule1ByOrigin(readMoreSelector, contentSelector) {
-        var dom ;
-        var parentElement,contentElement;
-        if(readMoreSelector.startsWith("#")){
+        var dom;
+        var parentElement, contentElement;
+        if (readMoreSelector.startsWith("#")) {
             dom = document.getElementById(readMoreSelector.substring(1))
             parentElement = dom.parentElement;
-        }else if(readMoreSelector.startsWith(".")){
+        } else if (readMoreSelector.startsWith(".")) {
             dom = document.getElementsByClassName(readMoreSelector.substring(1))
             if (dom.length > 0) {
                 parentElement = dom[0].parentElement;
             }
 
 
-        }else {
+        } else {
             dom = document.getElementsByTagName(readMoreSelector)
             parentElement = document.getElementsByClassName(readMoreSelector)[0].parentElement;
         }
 
-        if(contentSelector.startsWith("#")){
+        if (contentSelector.startsWith("#")) {
             contentElement = document.getElementById(contentSelector.substring(1))
             contentElement.style = ''
-        }else if(contentSelector.startsWith(".")){
+        } else if (contentSelector.startsWith(".")) {
             contentElement = document.getElementsByClassName(contentSelector.substring(1))
             contentElement[0].style = ''
 
-        }else {
+        } else {
             contentElement = document.getElementsByTagName(contentSelector)
             contentElement[0].style = ''
         }
@@ -161,14 +163,14 @@
                     heightArray.push($(this))
                 }
                 let text = $(this).text();
-                if (attr.indexOf("z-index")!= -1 && (text.indexOf("首次访问")!= -1 || text.indexOf("人机检测") != -1)) {
+                if (attr.indexOf("z-index") != -1 && (text.indexOf("首次访问") != -1 || text.indexOf("人机检测") != -1)) {
                     let zIndex = $(this).css("z-index");
                     console.log("zIndex:", zIndex)
                     let lastDiv = $("div[style]").filter(function () {
-                        return $(this).attr('style').indexOf("z-index") != -1 && $(this).css("z-index") == zIndex -1
+                        return $(this).attr('style').indexOf("z-index") != -1 && $(this).css("z-index") == zIndex - 1
                     })
-                    console.log("lastDiv:",lastDiv)
-                    if(lastDiv && lastDiv.length > 0){
+                    console.log("lastDiv:", lastDiv)
+                    if (lastDiv && lastDiv.length > 0) {
                         lastDiv.remove();
                     }
                 }
@@ -194,22 +196,22 @@
 
     }
 
-    function removeAlertRule1(){
+    function removeAlertRule1() {
         $("div[style]").each(function (index) {
             let attr = $(this).attr('style');
             let text = $(this).text();
-            if (attr.indexOf("z-index")!= -1 && (text.indexOf("首次访问")!= -1 || text.indexOf("人机检测") != -1)) {
+            if (attr.indexOf("z-index") != -1 && (text.indexOf("首次访问") != -1 || text.indexOf("人机检测") != -1)) {
                 let zIndex = $(this).css("z-index");
                 console.log("zIndex:", zIndex)
                 let lastDiv = $("div[style]").filter(function () {
-                    return $(this).attr('style').indexOf("z-index") != -1 && $(this).css("z-index") == zIndex -1
+                    return $(this).attr('style').indexOf("z-index") != -1 && $(this).css("z-index") == zIndex - 1
                 })
-                console.log("lastDiv:",lastDiv)
-                if(lastDiv && lastDiv.length > 0){
+                console.log("lastDiv:", lastDiv)
+                if (lastDiv && lastDiv.length > 0) {
                     lastDiv.remove();
                 }
                 $(this).remove();
-                $('body').css("overflow",'auto');
+                $('body').css("overflow", 'auto');
             }
 
         })
@@ -217,6 +219,17 @@
 
     var $ = $ || window.$ || jQuery;
     var href = window.location.href
+
+    function intervalReadAllRule2(checkSelector, removeSelector, removeClass) {
+        let interval = setInterval(function () {
+            console.log("轮训检测...")
+            if ($(checkSelector).length > 0) {
+                readAllRule2(checkSelector, removeSelector, removeClass)
+                clearInterval(interval)
+            }
+
+        }, 1000)
+    }
 
 // csdn
     if (href.indexOf('csdn') != -1) {
@@ -246,22 +259,34 @@
     } else if (href.indexOf('720ui.com') != -1) { // 720ui.com
         console.log("检测到720ui.com。。。。")
         readAllRule1("#read-more-btn", "#main")
-    }  else if (href.indexOf('sina.cn') != -1) { // k.sina.cn
+    } else if (href.indexOf('sina.cn') != -1) { // k.sina.cn
         console.log("检测到sina.cn。。。。")
-        readAllRule1ByOrigin(".foldBtn", ".s_card z_c1")
-        setTimeout(readAllRule1ByOrigin(".foldBtn", ".s_card z_c1"),10000)
+        let interval = setInterval(function () {
+            console.log("轮训检测...")
+            if ($(".foldBtn").length > 0) {
+                readAllRule1ByOrigin(".foldBtn", ".s_card z_c1")
+                clearInterval(interval)
+            }
+        }, 1000)
+    } else if (href.indexOf('toutiao') != -1) { // k.sina.cn
+        console.log("检测到toutiao。。。。")
+        // 循环检测
+        intervalReadAllRule2(".fold-btn", ".fold-btn-content", "fold-btn-content-fold");
+        // document.removeEventListener('click',getEventListeners($(document).get(0)).click[0].listener)
+
+
     } else if ($("#read-more-btn").length > 0) {
         console.log("检测到可能使用了openwrite推广工具。。。。")
         readAllRule4("#read-more-btn");
     } else if ($(".mask").length > 0 && $(".info").length > 0) { // cmsblogs.com
-        console.log("检测到%s。。。。",href)
+        console.log("检测到%s。。。。", href)
         readAllRule4(".info");
-    }else if(href.indexOf("iocoder") != -1){
-        setInterval(removeAlertRule1(),10000);
-    }else if(href.indexOf("javazhiyin") != -1){
+    } else if (href.indexOf("iocoder") != -1) {
+        setInterval(removeAlertRule1(), 10000);
+    } else if (href.indexOf("javazhiyin") != -1) {
         // 每隔10s移除弹出的关注检测弹框
         setInterval(removeFirstLayer(), 10000)
-    }else {
+    } else {
 
 
     }

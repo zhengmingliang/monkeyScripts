@@ -1,7 +1,8 @@
 // ==UserScript==
 // @name         阅读全文
 // @namespace    http://tampermonkey.net/
-// @version      1.5
+// @version      1.7
+// @require      https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js
 // @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com
 // @author       zhengmingliang
 // @match        https://blog.csdn.net/*
@@ -11,7 +12,8 @@
 // @match        *://*.720ui.com/*
 // @match        *://cloud.tencent.com/*
 // @match        *://*.didispace.com/*
-// @match        *://*/*
+// @match        *://*.sina.cn/*
+
 // @grant        none
 // ==/UserScript==
 
@@ -31,9 +33,48 @@
             // 使滚动条可见
             // $("#article_content").css('overflow','auto')
             // 优化后：直接将style置为空
+            console.log("style:%s",$(contentSelector).prop('style'))
             $(contentSelector).prop('style', '')
+            $(contentSelector).attr('style', '')
             console.log("已解除阅读全文关注限制。。。。")
         }
+    }
+    /**
+     * 阅读全文 规则1(openwrite.cn 插件规则)
+     * @param readMoreSelector
+     * @param contentSelector
+     */
+    function readAllRule1ByOrigin(readMoreSelector, contentSelector) {
+        var dom ;
+        var parentElement,contentElement;
+        if(readMoreSelector.startsWith("#")){
+            dom = document.getElementById(readMoreSelector.substring(1))
+            parentElement = dom.parentElement;
+        }else if(readMoreSelector.startsWith(".")){
+            dom = document.getElementsByClassName(readMoreSelector.substring(1))
+            if (dom.length > 0) {
+                parentElement = dom[0].parentElement;
+            }
+
+
+        }else {
+            dom = document.getElementsByTagName(readMoreSelector)
+            parentElement = document.getElementsByClassName(readMoreSelector)[0].parentElement;
+        }
+
+        if(contentSelector.startsWith("#")){
+            contentElement = document.getElementById(contentSelector.substring(1))
+            contentElement.style = ''
+        }else if(contentSelector.startsWith(".")){
+            contentElement = document.getElementsByClassName(contentSelector.substring(1))
+            contentElement[0].style = ''
+
+        }else {
+            contentElement = document.getElementsByTagName(contentSelector)
+            contentElement[0].style = ''
+        }
+        console.log(111)
+        parentElement.parentElement.removeChild(parentElement);
     }
 
     /**
@@ -174,7 +215,7 @@
         })
     }
 
-    var $ = $ || window.$;
+    var $ = $ || window.$ || jQuery;
     var href = window.location.href
 
 // csdn
@@ -205,7 +246,10 @@
     } else if (href.indexOf('720ui.com') != -1) { // 720ui.com
         console.log("检测到720ui.com。。。。")
         readAllRule1("#read-more-btn", "#main")
-        // Your code here...
+    }  else if (href.indexOf('sina.cn') != -1) { // k.sina.cn
+        console.log("检测到sina.cn。。。。")
+        readAllRule1ByOrigin(".foldBtn", ".s_card z_c1")
+        setTimeout(readAllRule1ByOrigin(".foldBtn", ".s_card z_c1"),10000)
     } else if ($("#read-more-btn").length > 0) {
         console.log("检测到可能使用了openwrite推广工具。。。。")
         readAllRule4("#read-more-btn");

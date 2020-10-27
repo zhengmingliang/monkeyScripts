@@ -34,4 +34,5 @@
     * Java技术驿站 cmsblogs.com
     * 芋道源码 www.iocoder.cn
     * Java学习 javazhiyin.com
+* sina.cn
 * 持续支持中...

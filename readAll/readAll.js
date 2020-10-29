@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         阅读全文
 // @namespace    http://tampermonkey.net/
-// @version      1.7.1
+// @version      1.8
 // @require      https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js
-// @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com
+// @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻
 // @author       zhengmingliang
 // @match        https://*.csdn.net/*
 // @match        *://*.github.io/*
@@ -14,7 +14,7 @@
 // @match        *://*.didispace.com/*
 // @match        *://*.sina.cn/*
 // @match        *://*.toutiao.com/*
-
+// @match        *://*.163.com/*
 // @grant        none
 // ==/UserScript==
 
@@ -272,6 +272,19 @@
         console.log("检测到toutiao。。。。")
         // 循环检测
         intervalReadAllRule2(".fold-btn", ".fold-btn-content", "fold-btn-content-fold");
+        // document.removeEventListener('click',getEventListeners($(document).get(0)).click[0].listener)
+
+
+    } else if (href.indexOf('163.com') != -1) { // k.sina.cn
+        console.log("检测到163.com。。。。")
+        // 循环检测
+       let interval = setInterval(function () {
+            console.log("轮训检测...")
+            if ($(".expand_more").length > 0) {
+                readAllRule1(".expand_more", "article")
+                clearInterval(interval)
+            }
+        }, 1000)
         // document.removeEventListener('click',getEventListeners($(document).get(0)).click[0].listener)
 
 

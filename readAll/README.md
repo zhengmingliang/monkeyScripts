@@ -34,6 +34,8 @@
     * Java技术驿站 cmsblogs.com
     * 芋道源码 www.iocoder.cn
     * Java学习 javazhiyin.com
-* sina.cn
-* toutiao.com
+* 新浪新闻 sina.cn
+* 头条 toutiao.com
+* 网易新闻 3g.163.com
+* 腾讯新闻 wx.qq.com
 * 持续支持中...

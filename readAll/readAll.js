@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         阅读全文
 // @namespace    http://tampermonkey.net/
-// @version      1.8
+// @version      1.8.1
 // @require      https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js
 // @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻、腾讯新闻
 // @author       zhengmingliang
@@ -16,6 +16,7 @@
 // @match        *://*.toutiao.com/*
 // @match        *://*.163.com/*
 // @match        *://*.qq.com/*
+// @match        *://*.*.qq.com/*
 // @grant        none
 // ==/UserScript==
 
@@ -218,6 +219,87 @@
         })
     }
 
+    /**
+     * 公共阅读全文规则1： 查找当前页面所有div接单，判断其style属性是否包含特征值
+     */
+    function commonReadAllRule1() {
+        $("div").each(function (index) {
+            let attr = $(this).attr('style');
+            if(attr){
+                if (attr.indexOf("height") != -1 && attr.indexOf("overflow") != -1 && attr.indexOf("hidden") != -1) {
+                    let id = $(this).attr('id');
+                    let cls = $(this).attr('class');
+                    let founded = false;
+                    if(id){
+                        console.log("检测到隐藏了全文的id：%s",id)
+                        founded = true
+                    }
+                    if(cls){
+                        console.log("检测到隐藏了全文的class：%s",cls)
+                        founded = true
+                    }
+
+                    if(founded){
+                        $(this).prop('style','')
+                        $(this).attr('style','')
+                    }
+
+                }
+            }
+
+        })
+    }
+
+    /**
+     * 公共移除dom节点
+     */
+    function commonRemoveRules1(selectors,isRemoveParent) {
+        if ('string' == typeof (selectors)) {
+            return commonRemoveRule1(selectors,isRemoveParent)
+        }else {
+            for (let index in selectors) {
+                commonRemoveRule1(selectors[index],isRemoveParent)
+            }
+        }
+
+    }
+
+    /**
+     * 公共查找节点名称
+     */
+    function commonFindRules1(keys) {
+        let split = keys.split(",");
+        let selector = $("div").filter(function (){
+            let text = $(this).text();
+            let flag = false;
+            for (let i in split) {
+                flag = text.indexOf(split[i]) && flag ;
+            }
+            return flag && $(this).children().length == 0
+        })
+        let id = selector.attr("id");
+        if(id){
+           return "#"+id;
+        }
+        let cls = selector.attr("class");
+        if(cls){
+           return "."+cls;
+        }
+        return selector;
+    }
+
+    function commonRemoveRule1(selector,isRemoveParent) {
+        var $selector = $(selector);
+        if($selector.length > 0){
+            if(isRemoveParent){
+                $selector.parent().remove();
+            }else {
+                $selector.remove();
+            }
+        }
+
+    }
+
     var $ = $ || window.$ || jQuery;
     var href = window.location.href
 
@@ -287,14 +369,16 @@
             }
         }, 1000)
         
-    } else if (href.indexOf('qq.com') != -1) { // wx.qq.com
-        console.log("检测到qq.com。。。。")
+    } else if (href.indexOf('wx.qq.com') != -1) { // wx.qq.com
+        console.log("检测到wx.qq.com。。。。")
         // 循环检测
        intervalReadAllRule2("div[aria-label]", "#article_body", "jsx-2375966888");
         $("#article_body").prop("style","margin:0 0.18rem; position:relative")
-        // document.removeEventListener('click',getEventListeners($(document).get(0)).click[0].listener)
-
-
+    } else if (href.indexOf('inews.qq.com') != -1) { // inews.qq.com
+        console.log("检测到inews.qq.com。。。。")
+        // 循环检测
+       commonRemoveRules1(["._1mAOD6Nkgp2wM7xlGCHeNi","._1GTaS1LTuTrKnZ-oQ6KFRG"],true)
+       commonReadAllRule1()
     } else if ($("#read-more-btn").length > 0) {
         console.log("检测到可能使用了openwrite推广工具。。。。")
         readAllRule4("#read-more-btn");

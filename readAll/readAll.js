@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      1.8
 // @require      https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js
-// @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻
+// @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻、腾讯新闻
 // @author       zhengmingliang
 // @match        https://*.csdn.net/*
 // @match        *://*.github.io/*
@@ -15,6 +15,7 @@
 // @match        *://*.sina.cn/*
 // @match        *://*.toutiao.com/*
 // @match        *://*.163.com/*
+// @match        *://*.qq.com/*
 // @grant        none
 // ==/UserScript==
 
@@ -268,14 +269,14 @@
                 clearInterval(interval)
             }
         }, 1000)
-    } else if (href.indexOf('toutiao') != -1) { // k.sina.cn
+    } else if (href.indexOf('toutiao') != -1) { // toutiao.com
         console.log("检测到toutiao。。。。")
         // 循环检测
         intervalReadAllRule2(".fold-btn", ".fold-btn-content", "fold-btn-content-fold");
         // document.removeEventListener('click',getEventListeners($(document).get(0)).click[0].listener)
 
 
-    } else if (href.indexOf('163.com') != -1) { // k.sina.cn
+    } else if (href.indexOf('163.com') != -1) { // 3g.163.com
         console.log("检测到163.com。。。。")
         // 循环检测
        let interval = setInterval(function () {
@@ -285,6 +286,12 @@
                 clearInterval(interval)
             }
         }, 1000)
+        
+    } else if (href.indexOf('qq.com') != -1) { // wx.qq.com
+        console.log("检测到qq.com。。。。")
+        // 循环检测
+       intervalReadAllRule2("div[aria-label]", "#article_body", "jsx-2375966888");
+        $("#article_body").prop("style","margin:0 0.18rem; position:relative")
         // document.removeEventListener('click',getEventListeners($(document).get(0)).click[0].listener)
 
 

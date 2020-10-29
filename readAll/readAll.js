@@ -5,7 +5,7 @@
 // @require      https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js
 // @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com
 // @author       zhengmingliang
-// @match        https://blog.csdn.net/*
+// @match        https://*.csdn.net/*
 // @match        *://*.github.io/*
 // @match        *://*.xz577.com/*
 // @match        *://*.iteye.com/*
@@ -239,7 +239,7 @@
         // 未登录
         readAllRule1(".btn-readmore", "#article_content")
         // 移动端处理
-        readAllRule1(".btn_mod", "#article_content")
+        readAllRule1(".btn_mod", ".article_content")
 
     } else if (href.indexOf('github.io') != -1) { //hoxis.github.io
         console.log("检测到github.io。。。。")

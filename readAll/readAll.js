@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         阅读全文
 // @namespace    http://tampermonkey.net/
-// @version      1.8.1
+// @version      1.8.2
 // @require      https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js
 // @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻、腾讯新闻
 // @author       zhengmingliang
@@ -377,8 +377,16 @@
     } else if (href.indexOf('inews.qq.com') != -1) { // inews.qq.com
         console.log("检测到inews.qq.com。。。。")
         // 循环检测
-       commonRemoveRules1(["._1mAOD6Nkgp2wM7xlGCHeNi","._1GTaS1LTuTrKnZ-oQ6KFRG"],true)
-       commonReadAllRule1()
+        let interval = setInterval(function (){
+            console.log("轮训检测...")
+            if($("._1mAOD6Nkgp2wM7xlGCHeNi").length > 0){
+                commonRemoveRules1(["._1mAOD6Nkgp2wM7xlGCHeNi","._1GTaS1LTuTrKnZ-oQ6KFRG"],true)
+                commonReadAllRule1()
+                clearInterval(interval)
+            }
+
+        },1000)
+
     } else if ($("#read-more-btn").length > 0) {
         console.log("检测到可能使用了openwrite推广工具。。。。")
         readAllRule4("#read-more-btn");

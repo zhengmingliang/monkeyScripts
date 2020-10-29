@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         阅读全文
 // @namespace    http://tampermonkey.net/
-// @version      1.7
+// @version      1.7.1
 // @require      https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js
 // @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com
 // @author       zhengmingliang

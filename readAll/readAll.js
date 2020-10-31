@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         阅读全文
 // @namespace    http://tampermonkey.net/
-// @version      1.8.2
+// @version      1.9
 // @require      https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js
-// @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻、腾讯新闻
+// @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻、腾讯新闻、51CTO
 // @author       zhengmingliang
 // @match        https://*.csdn.net/*
 // @match        *://*.github.io/*
@@ -17,6 +17,7 @@
 // @match        *://*.163.com/*
 // @match        *://*.qq.com/*
 // @match        *://*.*.qq.com/*
+// @match        *://blog.51cto.com/*
 // @grant        none
 // ==/UserScript==
 
@@ -386,6 +387,26 @@
             }
 
         },1000)
+
+    } else if (href.indexOf('51cto.com') != -1) { // blog.51cto.com
+        console.log("检测到blog.51cto.com。。。。")
+        // 循环检测
+        $(document).scroll(function (){
+            let count = 0;
+            let interval = setInterval(function (){
+                if($("#login_iframe_mask").length > 0){
+                    console.log("已清理登录弹框")
+                    $("#login_iframe_mask").remove();
+                    clearInterval(interval)
+                }
+                if( count ++ > 10){
+                    count = 0;
+                    clearInterval(interval)
+                }
+
+            },1000)
+        })
+
 
     } else if ($("#read-more-btn").length > 0) {
         console.log("检测到可能使用了openwrite推广工具。。。。")

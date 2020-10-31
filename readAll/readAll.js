@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         阅读全文
 // @namespace    http://tampermonkey.net/
-// @version      1.9
+// @version      1.9.1
 // @require      https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js
 // @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻、腾讯新闻、51CTO
 // @author       zhengmingliang
@@ -391,8 +391,9 @@
     } else if (href.indexOf('51cto.com') != -1) { // blog.51cto.com
         console.log("检测到blog.51cto.com。。。。")
         // 循环检测
-        $(document).scroll(function (){
+        /*$(document).scroll(function (){
             let count = 0;
+            console.log("轮训检测")
             let interval = setInterval(function (){
                 if($("#login_iframe_mask").length > 0){
                     console.log("已清理登录弹框")
@@ -405,8 +406,9 @@
                 }
 
             },1000)
-        })
-
+        })*/
+        // modify by zml 2020年10月31日 23:07:07 将原来监听是否有元素方式改为页面中添加css样式的方式来更好的解决弹框不停弹出的问题
+        $("style").get(0).append("#login_iframe_mask{display:none}");
 
     } else if ($("#read-more-btn").length > 0) {
         console.log("检测到可能使用了openwrite推广工具。。。。")

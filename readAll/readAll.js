@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         阅读全文、自动展开全文、自动移除万恶弹框
 // @namespace    http://tampermonkey.net/
-// @version      2.0
+// @version      2.0.1
 // @require      https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js
 // @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻、腾讯新闻、51CTO、知乎
 // @author       zhengmingliang
@@ -424,6 +424,10 @@
             if ($(".expandButton").length > 0) {
                 console.log("移除阅读全文")
                 $(".expandButton").remove()
+            }
+            if ($(".ContentItem-expandButton").length > 0) {
+                console.log("移除阅读全文")
+                $(".ContentItem-expandButton").remove()
             }
             if(count++ > 100){
                 clearInterval(interval);

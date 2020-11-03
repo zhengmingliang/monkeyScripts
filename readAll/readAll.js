@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         阅读全文、自动展开全文、自动移除万恶弹框
 // @namespace    http://tampermonkey.net/
-// @version      2.0.1
+// @version      2.1
 // @require      https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js
-// @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻、腾讯新闻、51CTO、知乎
+// @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻、腾讯新闻、51CTO、知乎、果壳科技（移动版）
 // @author       zhengmingliang
 // @match        https://*.csdn.net/*
 // @match        *://*.github.io/*
@@ -19,6 +19,7 @@
 // @match        *://*.*.qq.com/*
 // @match        *://blog.51cto.com/*
 // @match        *://*.zhihu.com/question/*
+// @match        *://*.guokr.com/*
 // @grant        none
 // ==/UserScript==
 
@@ -437,6 +438,13 @@
 
         $("style").get(0).append(".ModalWrap{display:none}");
 
+    } else if (href.indexOf('m.guokr.com') != -1) { // m.guokr.com
+        console.log("检测到m.guokr.com。。。。")
+        //let height = $(".styled__ArticleContent-sc0ctyfcr-4").position().top-$(".styled__ArticleContent-sc0ctyfcr-4").children().position().top
+        //$(".styled__ArticleContent-sc0ctyfcr-4").css("height",height);
+        $(".jYkhp").css("max-height","100%");
+        $(".jYkhp").css("overflow","auto");
+        $(".styled__Button-sc-1ctyfcr-7").parent().remove()
     } else if ($("#read-more-btn").length > 0) {
         console.log("检测到可能使用了openwrite推广工具。。。。")
         readAllRule4("#read-more-btn");

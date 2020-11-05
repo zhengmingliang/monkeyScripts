@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         阅读全文、自动展开全文、自动移除万恶弹框
 // @namespace    http://tampermonkey.net/
-// @version      2.1.1
+// @version      2.1.2
 // @require      https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js
 // @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻、腾讯新闻、51CTO、知乎、果壳科技（移动版）
 // @author       zhengmingliang
@@ -32,16 +32,16 @@
      * @param contentSelector
      */
     function readAllRule1(readMoreSelector, contentSelector) {
-        if ($(readMoreSelector).length > 0) {
+        if ($$$(readMoreSelector).length > 0) {
             console.log("检测到有阅读全文关注限制。。。。")
             // 移除阅读全文
-            $(readMoreSelector).parent().remove();
+            $$$(readMoreSelector).parent().remove();
             // 使滚动条可见
-            // $("#article_content").css('overflow','auto')
+            // $$$("#article_content").css('overflow','auto')
             // 优化后：直接将style置为空
-            console.log("style:%s", $(contentSelector).prop('style'))
-            $(contentSelector).prop('style', '')
-            $(contentSelector).attr('style', '')
+            console.log("style:%s", $$$(contentSelector).prop('style'))
+            $$$(contentSelector).prop('style', '')
+            $$$(contentSelector).attr('style', '')
             console.log("已解除阅读全文关注限制。。。。")
         }
     }
@@ -91,14 +91,14 @@
      * @param removeClass
      */
     function readAllRule2(readMoreSelector, removeSelector, removeClass) {
-        if ($(readMoreSelector).length > 0) {
+        if ($$$(readMoreSelector).length > 0) {
             console.log("检测到有阅读全文关注限制。。。。")
             // 移除阅读全文
-            $(readMoreSelector).remove();
+            $$$(readMoreSelector).remove();
             // 使滚动条可见
-            // $("#article_content").css('overflow','auto')
+            // $$$("#article_content").css('overflow','auto')
             // 优化后：直接将style置为空
-            $(removeSelector).removeClass(removeClass)
+            $$$(removeSelector).removeClass(removeClass)
             console.log("已解除阅读全文关注限制。。。。")
         }
     }
@@ -108,7 +108,7 @@
      * @param clickSelector
      */
     function readAllRule3(clickSelector) {
-        var selector = $(clickSelector);
+        var selector = $$$(clickSelector);
         if (!selector) {
             selector = jQuery(clickSelector);
         }
@@ -126,10 +126,10 @@
     function readAllRule4(removeSelector) {
         console.log("检测到有阅读全文关注限制。。。。")
         // 移除阅读全文
-        $(removeSelector).parent().remove();
+        $$$(removeSelector).parent().remove();
         var zIndexArray = [];
         var parentSelector = "div[style]"
-        if ($("article[style]").length > 0) {
+        if ($$$("article[style]").length > 0) {
             parentSelector = "article[style]"
         }
         var flag = false
@@ -155,24 +155,24 @@
         }
 
         function findElements() {
-            $(parentSelector).each(function (index) {
-                var attr = $(this).attr('style');
+            $$$(parentSelector).each(function (index) {
+                var attr = $$$(this).attr('style');
                 if (attr.indexOf("overflow") != -1 && attr.indexOf("height") != -1) {
-                    var overflow = $(this).css("overflow");
+                    var overflow = $$$(this).css("overflow");
                     if ('hidden' == overflow) {
-                        $(this).prop("style", "")
+                        $$$(this).prop("style", "")
                         flag = true
                     }
                 } else if (attr.indexOf("height") != -1) {
-                    console.log("index:", index, $(this))
-                    heightArray.push($(this))
+                    console.log("index:", index, $$$(this))
+                    heightArray.push($$$(this))
                 }
-                let text = $(this).text();
+                let text = $$$(this).text();
                 if (attr.indexOf("z-index") != -1 && (text.indexOf("首次访问") != -1 || text.indexOf("人机检测") != -1)) {
-                    let zIndex = $(this).css("z-index");
+                    let zIndex = $$$(this).css("z-index");
                     console.log("zIndex:", zIndex)
-                    let lastDiv = $("div[style]").filter(function () {
-                        return $(this).attr('style').indexOf("z-index") != -1 && $(this).css("z-index") == zIndex - 1
+                    let lastDiv = $$$("div[style]").filter(function () {
+                        return $$$(this).attr('style').indexOf("z-index") != -1 && $$$(this).css("z-index") == zIndex - 1
                     })
                     console.log("lastDiv:", lastDiv)
                     if (lastDiv && lastDiv.length > 0) {
@@ -188,35 +188,35 @@
      * java学习 javazhiyin.com
      */
     function removeFirstLayer() {
-        if ($(".layui-layer-page").length > 0) {
-            var text = $(".layui-layer-page").text();
+        if ($$$(".layui-layer-page").length > 0) {
+            var text = $$$(".layui-layer-page").text();
             if (text.indexOf('首次访问') != -1 || text.indexOf('人机识别')) {
 
             }
 
-            $(".layui-layer-page").remove();
-            $(".layui-layer-shade").remove();
+            $$$(".layui-layer-page").remove();
+            $$$(".layui-layer-shade").remove();
         }
-        $("div[index]")
+        $$$("div[index]")
 
     }
 
     function removeAlertRule1() {
-        $("div[style]").each(function (index) {
-            let attr = $(this).attr('style');
-            let text = $(this).text();
+        $$$("div[style]").each(function (index) {
+            let attr = $$$(this).attr('style');
+            let text = $$$(this).text();
             if (attr.indexOf("z-index") != -1 && (text.indexOf("首次访问") != -1 || text.indexOf("人机检测") != -1)) {
-                let zIndex = $(this).css("z-index");
+                let zIndex = $$$(this).css("z-index");
                 console.log("zIndex:", zIndex)
-                let lastDiv = $("div[style]").filter(function () {
-                    return $(this).attr('style').indexOf("z-index") != -1 && $(this).css("z-index") == zIndex - 1
+                let lastDiv = $$$("div[style]").filter(function () {
+                    return $$$(this).attr('style').indexOf("z-index") != -1 && $$$(this).css("z-index") == zIndex - 1
                 })
                 console.log("lastDiv:", lastDiv)
                 if (lastDiv && lastDiv.length > 0) {
                     lastDiv.remove();
                 }
-                $(this).remove();
-                $('body').css("overflow", 'auto');
+                $$$(this).remove();
+                $$$('body').css("overflow", 'auto');
             }
 
         })
@@ -226,12 +226,12 @@
      * 公共阅读全文规则1： 查找当前页面所有div接单，判断其style属性是否包含特征值
      */
     function commonReadAllRule1() {
-        $("div").each(function (index) {
-            let attr = $(this).attr('style');
+        $$$("div").each(function (index) {
+            let attr = $$$(this).attr('style');
             if(attr){
                 if (attr.indexOf("height") != -1 && attr.indexOf("overflow") != -1 && attr.indexOf("hidden") != -1) {
-                    let id = $(this).attr('id');
-                    let cls = $(this).attr('class');
+                    let id = $$$(this).attr('id');
+                    let cls = $$$(this).attr('class');
                     let founded = false;
                     if(id){
                         console.log("检测到隐藏了全文的id：%s",id)
@@ -243,8 +243,8 @@
                     }
 
                     if(founded){
-                        $(this).prop('style','')
-                        $(this).attr('style','')
+                        $$$(this).prop('style','')
+                        $$$(this).attr('style','')
                     }
 
                 }
@@ -272,13 +272,13 @@
      */
     function commonFindRules1(keys) {
         let split = keys.split(",");
-        let selector = $("div").filter(function (){
-            let text = $(this).text();
+        let selector = $$$("div").filter(function (){
+            let text = $$$(this).text();
             let flag = false;
             for (let i in split) {
                 flag = text.indexOf(split[i]) && flag ;
             }
-            return flag && $(this).children().length == 0
+            return flag && $$$(this).children().length == 0
         })
         let id = selector.attr("id");
         if(id){
@@ -292,7 +292,7 @@
     }
 
     function commonRemoveRule1(selector,isRemoveParent) {
-        var $selector = $(selector);
+        var $selector = $$$(selector);
         if($selector.length > 0){
             if(isRemoveParent){
                 $selector.parent().remove();
@@ -302,14 +302,14 @@
         }
 
     }
-
-    var $ = $ || window.$ || jQuery;
+    var jqNo = jQuery.noConflict();
+    var $$$ = $ || window.$ || jqNo;
     var href = window.location.href
 
     function intervalReadAllRule2(checkSelector, removeSelector, removeClass) {
         let interval = setInterval(function () {
             console.log("轮训检测...")
-            if ($(checkSelector).length > 0) {
+            if ($$$(checkSelector).length > 0) {
                 readAllRule2(checkSelector, removeSelector, removeClass)
                 clearInterval(interval)
             }
@@ -349,7 +349,7 @@
         console.log("检测到sina.cn。。。。")
         let interval = setInterval(function () {
             console.log("轮训检测...")
-            if ($(".foldBtn").length > 0) {
+            if ($$$(".foldBtn").length > 0) {
                 readAllRule1ByOrigin(".foldBtn", ".s_card z_c1")
                 clearInterval(interval)
             }
@@ -358,7 +358,7 @@
         console.log("检测到toutiao。。。。")
         // 循环检测
         intervalReadAllRule2(".fold-btn", ".fold-btn-content", "fold-btn-content-fold");
-        // document.removeEventListener('click',getEventListeners($(document).get(0)).click[0].listener)
+        // document.removeEventListener('click',getEventListeners($$$(document).get(0)).click[0].listener)
 
 
     } else if (href.indexOf('163.com') != -1) { // 3g.163.com
@@ -366,23 +366,23 @@
         // 循环检测
        let interval = setInterval(function () {
             console.log("轮训检测...")
-            if ($(".expand_more").length > 0) {
+            if ($$$(".expand_more").length > 0) {
                 readAllRule1(".expand_more", "article")
                 clearInterval(interval)
             }
         }, 1000)
         
-    } else if (href.indexOf('wx.qq.com') != -1) { // wx.qq.com
-        console.log("检测到wx.qq.com。。。。")
+    } else if (href.indexOf('xw.qq.com') != -1) { // xw.qq.com
+        console.log("检测到xw.qq.com。。。。")
         // 循环检测
        intervalReadAllRule2("div[aria-label]", "#article_body", "jsx-2375966888");
-        $("#article_body").prop("style","margin:0 0.18rem; position:relative")
+        $$$("#article_body").prop("style","margin:0 0.18rem; position:relative")
     } else if (href.indexOf('inews.qq.com') != -1) { // inews.qq.com
         console.log("检测到inews.qq.com。。。。")
         // 循环检测
         let interval = setInterval(function (){
             console.log("轮训检测...")
-            if($("._1mAOD6Nkgp2wM7xlGCHeNi").length > 0){
+            if($$$("._1mAOD6Nkgp2wM7xlGCHeNi").length > 0){
                 commonRemoveRules1(["._1mAOD6Nkgp2wM7xlGCHeNi","._1GTaS1LTuTrKnZ-oQ6KFRG"],true)
                 commonReadAllRule1()
                 clearInterval(interval)
@@ -393,13 +393,13 @@
     } else if (href.indexOf('51cto.com') != -1) { // blog.51cto.com
         console.log("检测到blog.51cto.com。。。。")
         // 循环检测
-        /*$(document).scroll(function (){
+        /*$$$(document).scroll(function (){
             let count = 0;
             console.log("轮训检测")
             let interval = setInterval(function (){
-                if($("#login_iframe_mask").length > 0){
+                if($$$("#login_iframe_mask").length > 0){
                     console.log("已清理登录弹框")
-                    $("#login_iframe_mask").remove();
+                    $$$("#login_iframe_mask").remove();
                     clearInterval(interval)
                 }
                 if( count ++ > 10){
@@ -410,25 +410,25 @@
             },1000)
         })*/
         // modify by zml 2020年10月31日 23:07:07 将原来监听是否有元素方式改为页面中添加css样式的方式来更好的解决弹框不停弹出的问题
-        $("style").get(0).append("#login_iframe_mask{display:none}");
+        $$$("style").get(0).append("#login_iframe_mask{display:none}");
 
     } else if (href.indexOf('zhihu.com') != -1) { // blog.51cto.com
         console.log("检测到zhihu.com。。。。")
         let count = 0;
         let interval = setInterval(function (){
             if(".ModalWrap-body".length > 0){
-                $(".ModalWrap-body").prop("style","").removeClass("ModalWrap-body")
+                $$$(".ModalWrap-body").prop("style","").removeClass("ModalWrap-body")
             }
-            if($(".RichContent-inner").length > 0){
-                $(".RichContent-inner").prop("style","").removeClass("RichContent-inner").removeClass("RichContent-inner--collapsed")
+            if($$$(".RichContent-inner").length > 0){
+                $$$(".RichContent-inner").prop("style","").removeClass("RichContent-inner").removeClass("RichContent-inner--collapsed")
             }
-            if ($(".expandButton").length > 0) {
+            if ($$$(".expandButton").length > 0) {
                 console.log("移除阅读全文")
-                $(".expandButton").remove()
+                $$$(".expandButton").remove()
             }
-            if ($(".ContentItem-expandButton").length > 0) {
+            if ($$$(".ContentItem-expandButton").length > 0) {
                 console.log("移除阅读全文")
-                $(".ContentItem-expandButton").remove()
+                $$$(".ContentItem-expandButton").remove()
             }
             if(count++ > 100){
                 clearInterval(interval);
@@ -436,20 +436,20 @@
 
         },1000)
 
-        $("style").get(0).append(".ModalWrap{display:none}");
+        $$$("style").get(0).append(".ModalWrap{display:none}");
 
     } else if (href.indexOf('m.guokr.com') != -1) { // m.guokr.com
         console.log("检测到m.guokr.com。。。。")
-        //let height = $(".styled__ArticleContent-sc0ctyfcr-4").position().top-$(".styled__ArticleContent-sc0ctyfcr-4").children().position().top
-        //$(".styled__ArticleContent-sc0ctyfcr-4").css("height",height);
-        $(".jYkhp").css("max-height","100%");
-        $(".jYkhp").css("overflow","auto");
-        $(".styled__Button-sc-1ctyfcr-7").parent().remove()
-        $(".gJghO").css("display","none")// 移除底部APP横幅广告
-    } else if ($("#read-more-btn").length > 0) {
+        //let height = $$$(".styled__ArticleContent-sc0ctyfcr-4").position().top-$$$(".styled__ArticleContent-sc0ctyfcr-4").children().position().top
+        //$$$(".styled__ArticleContent-sc0ctyfcr-4").css("height",height);
+        $$$(".jYkhp").css("max-height","100%");
+        $$$(".jYkhp").css("overflow","auto");
+        $$$(".styled__Button-sc-1ctyfcr-7").parent().remove()
+        $$$(".gJghO").css("display","none")// 移除底部APP横幅广告
+    } else if ($$$("#read-more-btn").length > 0) {
         console.log("检测到可能使用了openwrite推广工具。。。。")
         readAllRule4("#read-more-btn");
-    } else if ($(".mask").length > 0 && $(".info").length > 0) { // cmsblogs.com
+    } else if ($$$(".mask").length > 0 && $$$(".info").length > 0) { // cmsblogs.com
         console.log("检测到%s。。。。", href)
         readAllRule4(".info");
     } else if (href.indexOf("iocoder") != -1) {

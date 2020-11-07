@@ -43,4 +43,7 @@
 * 知乎
 * 果壳科技（移动版） m.guokr.com
 * awesomes.cn
+* javascriptcn.com
+* 人民日报（移动版）
+* 凤凰网（移动版）
 * 持续支持中...

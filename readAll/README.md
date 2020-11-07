@@ -1,7 +1,7 @@
 > 最近关注公众号或者关注用户阅读全文的模式在全网开始普及，就想静静的看篇博文怎么这么难，这里写一个自用的阅读全文的脚本，后续有更多网站需要支持，欢迎反馈
 
 ### 脚本功能
-主要是用于屏蔽一些网站的关注公众号、或关注用户等行为后才能阅读全文
+主要是用于屏蔽一些网站的关注公众号、或关注用户等行为后才能阅读全文，清理定时弹出关注弹框等
 ### 安装脚本
 1. 首先安装浏览器插件`Tampermonkey`（脚本管理器）
     * Tampermonkey: [官网地址](https://www.tampermonkey.net/index.php)
@@ -20,9 +20,27 @@
 
 ### 目前支持的网站
 * CSDN
-* github.io
-* xz577.com
 * cloud.tencent.com
 * iteye.com
-* 720ui.com
+* 所有使用openwrite.cn推广公众号的个人博客
+    * blog.720ui.com
+    * 程序员DD blog.didispace.com
+    * hoxis.github.io
+    * itmuch.com
+    * 54tianzhisheng.cn
+    * ...
+* 其他个人博客
+    * xz577.com
+    * Java技术驿站 cmsblogs.com
+    * 芋道源码 www.iocoder.cn
+    * Java学习 javazhiyin.com
+* 新浪新闻 sina.cn
+* 头条 toutiao.com
+* 网易新闻 3g.163.com
+* 腾讯新闻 wx.qq.com
+* 51CTO 
+    > 清理51CTO未登录状态下滚动页面一直弹出登录弹框的问题
+* 知乎
+* 果壳科技（移动版） m.guokr.com
+* awesomes.cn
 * 持续支持中...

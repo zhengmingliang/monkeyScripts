@@ -1,13 +1,14 @@
 // ==UserScript==
 // @name         阅读全文、自动展开全文、自动移除万恶弹框
 // @namespace    http://tampermonkey.net/
-// @version      2.2.0
-// @require      https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js
-// @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻、腾讯新闻、51CTO、知乎、果壳科技（移动版）、awesomes.cn
+// @version      2.3.0
+// @require      https://cdn.jsdelivr.net/gh/zhengmingliang/monkeyScripts@2.2.0/lib/jquery-3.5.1.min.js
+// @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻、腾讯新闻、51CTO、知乎、果壳科技（移动版）、awesomes.cn、javascriptcn.com、人民日报（移动版）、凤凰网
 // @author       zhengmingliang
 // @match        https://*.csdn.net/*
 // @match        *://*.github.io/*
 // @match        *://*.xz577.com/*
+// @match        *://*.javascriptcn.com/*
 // @match        *://*.iteye.com/*
 // @match        *://*.720ui.com/*
 // @match        *://cloud.tencent.com/*
@@ -22,6 +23,8 @@
 // @match        *://*.zhihu.com/question/*
 // @match        *://*.guokr.com/*
 // @match        *://*.awesomes.cn/*
+// @match        *://wap.peopleapp.com/article/*
+// @match        *://*.ifeng.com/c/*
 // @grant        none
 // ==/UserScript==
 
@@ -304,8 +307,7 @@
         }
 
     }
-    var jqNo = jQuery.noConflict();
-    var $$$ = $ || window.$ || jqNo;
+    var $$$ = $ || window._$ || zmQuery;
     var href = window.location.href
 
     function intervalReadAllRule2(checkSelector, removeSelector, removeClass) {
@@ -374,11 +376,43 @@
             }
         }, 1000)
         
+    } else if (href.indexOf('peopleapp.com') != -1) { // 3g.163.com
+        console.log("检测到人民日報。。。。")
+        // 循环检测
+       let interval = setInterval(function () {
+            console.log("轮训检测...")
+            if ($$$(".read-more-mask").length > 0) {
+                readAllRule2(".read-more-mask", ".has-more-high","has-more-high")
+                $$$("#header").remove()
+                clearInterval(interval)
+            }
+        }, 1000)
+
+    } else if (href.indexOf('ifeng.com') != -1) { // ifeng.com
+        console.log("检测到鳳凰网。。。。")
+        // 循环检测
+       let interval = setInterval(function () {
+            console.log("轮训检测...")
+            if ($$$("div[class^=tip-]").length > 0) {
+                // readAllRule4(, "div[class^=main_content-]")
+                commonRemoveRules1(["div[class^=tip-]",".link-1xGgkMtk"])
+                commonReadAllRule1();
+                clearInterval(interval)
+            }
+        }, 1000)
+
     } else if (href.indexOf('awesomes.cn') != -1) { // awesomes.com
         console.log("检测到awesomes.cn。。。。")
         // 循环检测
         if ($$$(".read_more_mask").length > 0) {
             readAllRule1(".read_more_mask", ".content")
+        }
+
+    } else if (href.indexOf('javascriptcn.com') != -1) { // javascriptcn.com
+        console.log("检测到javascriptcn.com。。。。")
+        // 循环检测
+        if ($$$(".read_more_mask").length > 0) {
+            readAllRule1(".read_more_mask", ".markdown-body")
         }
 
     } else if (href.indexOf('xw.qq.com') != -1) { // xw.qq.com

@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         阅读全文、自动展开全文、自动移除万恶弹框
 // @namespace    http://tampermonkey.net/
-// @version      2.1.3
+// @version      2.2.0
 // @require      https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js
-// @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻、腾讯新闻、51CTO、知乎、果壳科技（移动版）
+// @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻、腾讯新闻、51CTO、知乎、果壳科技（移动版）、awesomes.cn
 // @author       zhengmingliang
 // @match        https://*.csdn.net/*
 // @match        *://*.github.io/*
@@ -21,6 +21,7 @@
 // @match        *://blog.51cto.com/*
 // @match        *://*.zhihu.com/question/*
 // @match        *://*.guokr.com/*
+// @match        *://*.awesomes.cn/*
 // @grant        none
 // ==/UserScript==
 
@@ -373,6 +374,13 @@
             }
         }, 1000)
         
+    } else if (href.indexOf('awesomes.cn') != -1) { // awesomes.com
+        console.log("检测到awesomes.cn。。。。")
+        // 循环检测
+        if ($$$(".read_more_mask").length > 0) {
+            readAllRule1(".read_more_mask", ".content")
+        }
+
     } else if (href.indexOf('xw.qq.com') != -1) { // xw.qq.com
         console.log("检测到xw.qq.com。。。。")
         // 循环检测

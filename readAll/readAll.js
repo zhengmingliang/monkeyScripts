@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         阅读全文、自动展开全文、自动移除万恶弹框
 // @namespace    http://tampermonkey.net/
-// @version      2.3.1
+// @version      2.3.2
 // @require      https://greasyfork.org/scripts/415668-zmquery3-5-1/code/zmQuery351.js?version=866815
 // @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻、腾讯新闻、51CTO、知乎、果壳科技（移动版）、awesomes.cn、javascriptcn.com、人民日报（移动版）、凤凰网
 // @author       zhengmingliang
@@ -365,7 +365,7 @@
         // document.removeEventListener('click',getEventListeners($$$(document).get(0)).click[0].listener)
 
 
-    } else if (href.indexOf('163.com') != -1) { // 3g.163.com
+    } else if (href.indexOf('3g.163.com') != -1) { // 3g.163.com
         console.log("检测到163.com。。。。")
         // 循环检测
        let interval = setInterval(function () {

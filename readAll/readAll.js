@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         阅读全文、自动展开全文、自动移除万恶弹框
 // @namespace    http://tampermonkey.net/
-// @version      2.3.0
-// @require      https://cdn.jsdelivr.net/gh/zhengmingliang/monkeyScripts@2.2.0/lib/jquery-3.5.1.min.js
+// @version      2.4.0
+// @require      https://greasyfork.org/scripts/415668-zmquery3-5-1/code/zmQuery351.js?version=866815
 // @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻、腾讯新闻、51CTO、知乎、果壳科技（移动版）、awesomes.cn、javascriptcn.com、人民日报（移动版）、凤凰网
 // @author       zhengmingliang
 // @match        https://*.csdn.net/*
@@ -23,6 +23,7 @@
 // @match        *://*.zhihu.com/question/*
 // @match        *://*.guokr.com/*
 // @match        *://*.awesomes.cn/*
+// @match        *://*.javazhiyin.com/*
 // @match        *://wap.peopleapp.com/article/*
 // @match        *://*.ifeng.com/c/*
 // @grant        none
@@ -206,6 +207,14 @@
 
     }
 
+    /**
+     * 对layui或layer 样式进行重写，使其弹框进行隐藏
+     */
+   function addLayerCssStyle() {
+       $$$("style").get(0).append(".layui-layer-shade{display:none !important} .layui-layer-page{display:none !important}")
+
+    }
+
     function removeAlertRule1() {
         $$$("div[style]").each(function (index) {
             let attr = $$$(this).attr('style');
@@ -365,7 +374,7 @@
         // document.removeEventListener('click',getEventListeners($$$(document).get(0)).click[0].listener)
 
 
-    } else if (href.indexOf('163.com') != -1) { // 3g.163.com
+    } else if (href.indexOf('3g.163.com') != -1) { // 3g.163.com
         console.log("检测到163.com。。。。")
         // 循环检测
        let interval = setInterval(function () {
@@ -498,6 +507,7 @@
     } else if (href.indexOf("iocoder") != -1) {
         setInterval(removeAlertRule1(), 10000);
     } else if (href.indexOf("javazhiyin") != -1) {
+        addLayerCssStyle();
         // 每隔10s移除弹出的关注检测弹框
         setInterval(removeFirstLayer(), 10000)
     } else {

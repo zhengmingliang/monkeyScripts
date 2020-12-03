@@ -15,7 +15,7 @@
 // @match        *://*.didispace.com/*
 // @match        *://*.sina.cn/*
 // @match        *://*.toutiao.com/*
-// @match        *://*.163.com/*
+// @match        *://3g.163.com/*
 // @match        *://*.inews.qq.com/*
 // @match        *://inews.qq.com/*
 // @match        *://xw.qq.com/*

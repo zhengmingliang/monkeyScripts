@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         阅读全文、自动展开全文、自动移除万恶弹框
 // @namespace    http://tampermonkey.net/
-// @version      2.6.0
+// @version      2.8.3
 // @require      https://greasyfork.org/scripts/415668-zmquery3-5-1/code/zmQuery351.js?version=866815
-// @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻、腾讯新闻、51CTO、知乎、果壳科技（移动版）、awesomes.cn、javascriptcn.com、人民日报（移动版）、凤凰网、虎扑移动版、百度经验
+// @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻、腾讯新闻、51CTO、知乎、果壳科技（移动版）、awesomes.cn、javascriptcn.com、人民日报（移动版）、凤凰网、虎扑移动版、百度经验、360文档（个人图书馆）、乐居买房（移动版）
 // @author       zhengmingliang
 // @match        https://*.csdn.net/*
 // @match        *://*.github.io/*
@@ -12,6 +12,7 @@
 // @match        *://*.iteye.com/*
 // @match        *://*.720ui.com/*
 // @match        *://cloud.tencent.com/*
+// @match        *://m.leju.com/*
 // @match        *://*.didispace.com/*
 // @match        *://*.sina.cn/*
 // @match        *://*.toutiao.com/*
@@ -28,6 +29,8 @@
 // @match        *://wap.peopleapp.com/article/*
 // @match        *://jingyan.baidu.com/article/*
 // @match        *://*.ifeng.com/c/*
+// @match        *://*.360doc.com/content/*
+// @match        *://www.hi-linux.com/posts/*
 // @grant        none
 // ==/UserScript==
 
@@ -39,17 +42,24 @@
      * @param readMoreSelector
      * @param contentSelector
      */
-    function readAllRule1(readMoreSelector, contentSelector) {
+    function readAllRule1(readMoreSelector, contentSelector,isCurrent) {
         if ($$$(readMoreSelector).length > 0) {
             console.log("检测到有阅读全文关注限制。。。。")
             // 移除阅读全文
-            $$$(readMoreSelector).parent().remove();
+            if(isCurrent){
+                $$$(readMoreSelector).remove();
+            }else {
+                $$$(readMoreSelector).parent().remove();
+            }
             // 使滚动条可见
             // $$$("#article_content").css('overflow','auto')
             // 优化后：直接将style置为空
             console.log("style:%s", $$$(contentSelector).prop('style'))
             $$$(contentSelector).prop('style', '')
             $$$(contentSelector).attr('style', '')
+            $$$(contentSelector).css('max-height', 'none')
+            $$$(contentSelector).css('height', 'auto')
+            $$$(contentSelector).css('overflow', 'visible')
             console.log("已解除阅读全文关注限制。。。。")
         }
     }
@@ -59,16 +69,16 @@
      * @param readMoreSelector
      * @param contentSelector
      */
-    function readAllRule1ByOrigin(readMoreSelector, contentSelector) {
+    function readAllRule1ByOrigin(readMoreSelector, contentSelector,removeCurrent) {
         var dom;
         var parentElement, contentElement;
         if (readMoreSelector.startsWith("#")) {
             dom = document.getElementById(readMoreSelector.substring(1))
-            parentElement = dom.parentElement;
+            parentElement = removeCurrent ? dom : dom.parentElement;
         } else if (readMoreSelector.startsWith(".")) {
             dom = document.getElementsByClassName(readMoreSelector.substring(1))
             if (dom.length > 0) {
-                parentElement = dom[0].parentElement;
+                parentElement = removeCurrent ? dom : dom[0].parentElement;
             }
 
 
@@ -215,6 +225,26 @@
    function addLayerCssStyle() {
        $$$("style").get(0).append(".layui-layer-shade{display:none !important} .layui-layer-page{display:none !important}")
 
+    }
+
+    /**
+     * 对class 样式进行重写，使滚动条显示
+     */
+   function addOverflowCssStyle(cssSelector) {
+        console.log("style:%s", $$$(cssSelector).prop('style'))
+        $$$(cssSelector).prop('style', '')
+        $$$(cssSelector).attr('style', '')
+        $$$(cssSelector).css('max-height', 'none')
+        $$$(cssSelector).css('height', 'auto')
+        $$$(cssSelector).css('overflow', 'visible')
+    }
+
+    /**
+     * 对class 样式进行重写
+     */
+   function addDisplayStyle(cssSelector) {
+       $$$(cssSelector).css("display","none");
+       $$$(cssSelector).attr("style","display:none");
     }
 
     function addDisplayCssStyle() {
@@ -371,12 +401,31 @@
     } else if (href.indexOf('720ui.com') != -1) { // 720ui.com
         console.log("检测到720ui.com。。。。")
         readAllRule1("#read-more-btn", "#main")
+    } else if (href.indexOf('360doc.com') != -1) { // 360doc
+        console.log("检测到360doc.com。。。。")
+        addOverflowCssStyle(".article_container")
+        addDisplayStyle(".article_showall")
+    } else if (href.indexOf('m.leju.com') != -1) { // 360doc
+        console.log("检测到m.leju.com。。。。")
+        let interval = setInterval(function () {
+            console.log("轮训检测...")
+            if ($$$(".ztt_more").length > 0) {
+                readAllRule1(".ztt_more", ".ztt_outer",true)
+                clearInterval(interval)
+            }
+        }, 1000)
     } else if (href.indexOf('sina.cn') != -1) { // k.sina.cn
         console.log("检测到sina.cn。。。。")
         let interval = setInterval(function () {
             console.log("轮训检测...")
             if ($$$(".unfold-btn1").length > 0) {
                 readAllRule1ByOrigin(".unfold-btn1", ".main-body")
+                clearInterval(interval)
+            }else if ($$$(".ztt_more").length > 0) {
+                readAllRule1ByOrigin(".ztt_more", ".ztt_outer",true)
+                clearInterval(interval)
+            }else if ($$$(".look_more_a").length > 0) {
+                readAllRule1ByOrigin("#artFoldBox", ".s_card z_c1",true)
                 clearInterval(interval)
             }
         }, 1000)
@@ -400,13 +449,16 @@
         
     } else if (href.indexOf('peopleapp.com') != -1) { // 3g.163.com
         console.log("检测到人民日報。。。。")
+        let count = 0;
         // 循环检测
        let interval = setInterval(function () {
             console.log("轮训检测...")
             if ($$$(".read-more-mask").length > 0) {
-                readAllRule2(".read-more-mask", ".has-more-high","has-more-high")
+                readAllRule1(".read-more-mask", ".has-more-high",)
                 $$$("#header").remove()
-                clearInterval(interval)
+                if(count++ > 10){
+                    clearInterval(interval)
+                }
             }
         }, 1000)
 
@@ -497,22 +549,30 @@
             if(".ModalWrap-body".length > 0){
                 $$$(".ModalWrap-body").prop("style","").removeClass("ModalWrap-body")
             }
+            if(".is-collapsed".length > 0){
+                $$$(".is-collapsed").removeClass("is-collapsed");
+            }
             if($$$(".RichContent-inner").length > 0){
-                $$$(".RichContent-inner").prop("style","").removeClass("RichContent-inner").removeClass("RichContent-inner--collapsed")
+                // $$$(".RichContent-inner").prop("style","").removeClass("RichContent-inner--collapsed")
+                addOverflowCssStyle(".RichContent-inner--collapsed")
+                addOverflowCssStyle(".RichContent--unescapable")
+                addOverflowCssStyle(".is-collapsed")
             }
             if ($$$(".expandButton").length > 0) {
                 console.log("移除阅读全文")
-                $$$(".expandButton").remove()
+                // $$$(".expandButton").remove()
+                addDisplayStyle(".expandButton")
             }
             if ($$$(".ContentItem-expandButton").length > 0) {
                 console.log("移除阅读全文")
-                $$$(".ContentItem-expandButton").remove()
+                // $$$(".ContentItem-expandButton").remove()
+                addDisplayStyle(".ContentItem-expandButton")
             }
             if(count++ > 100){
                 clearInterval(interval);
             }
 
-        },1000)
+        },100)
 
         $$$("style").get(0).append(".ModalWrap{display:none}");
 

@@ -34,6 +34,7 @@
     * Java技术驿站 cmsblogs.com
     * 芋道源码 www.iocoder.cn
     * Java学习 javazhiyin.com
+    * 奇妙的Linux世界 hi-linux.com
 * 新浪新闻 sina.cn
 * 头条 toutiao.com
 * 网易新闻 3g.163.com
@@ -48,6 +49,8 @@
 * 凤凰网（移动版）
 * 虎扑（移动版）
 * 百度经验
+* 360文档（个人图书馆）
+* 乐居买房（移动版）
 * 持续支持中...
 
 ## 作者推荐脚本

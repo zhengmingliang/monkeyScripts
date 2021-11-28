@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         阅读全文、自动展开全文、自动移除万恶弹框
 // @namespace    http://tampermonkey.net/
-// @version      2.14.1
+// @version      2.15.0
 // @require      https://greasyfork.org/scripts/415668-zmquery3-5-1/code/zmQuery351.js?version=866815
-// @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻、腾讯新闻、51CTO、知乎、果壳科技（移动版）、awesomes.cn、javascriptcn.com、人民日报（移动版）、凤凰网、虎扑移动版、百度经验、360文档（个人图书馆）、乐居买房（移动版）、电子发烧友网（PC、移动版）、悟空问答（PC、移动版）、百家号、百度文章、简书移动版、搜狐移动版、goodreads（PC、移动版）
+// @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻、腾讯新闻、51CTO、知乎、果壳科技（移动版）、awesomes.cn、javascriptcn.com、人民日报（移动版）、凤凰网、虎扑移动版、百度经验、360文档（个人图书馆）、乐居买房（移动版）、电子发烧友网（PC、移动版）、悟空问答（PC、移动版）、百家号、百度文章、简书移动版、搜狐移动版、goodreads（PC、移动版）、百度文库移动、PC版
 // @author       zhengmingliang
 // @match        https://*.csdn.net/*
 // @match        *://*.github.io/*
@@ -510,6 +510,31 @@
             }
         }, 1000)
         addLayerCssStyle2();
+    }  else if (href.indexOf('wenku.baidu.com') != -1) { // 百度文库PC版
+        console.log("检测到百度文库。。。。")
+        // 循环检测
+       let interval = setInterval(function () {
+            console.log("轮训检测...")
+            if ($$$("#reader-container").length > 0) {
+                $$$("#reader-container").css("height","fit-content");
+                commonHideRule1(".try-end-fold-page")
+                clearInterval(interval)
+            }
+        }, 1000)
+    } else if (href.indexOf('wk.baidu.com') != -1) { // 百度文库移动版
+        console.log("检测到百度文库。。。。")
+        // 循环检测
+       let interval = setInterval(function () {
+            console.log("轮训检测...")
+            if ($$$(".fold-pager").length > 0) {
+                $$$("#reader-container").css("height","fit-content");
+                commonHideRule1(".fold-pager")
+                $$$(".reader-wrap").css('height', 'auto')
+                $$$("#view-app").css('max-height', '')
+                $$$(".try-end-fold-page").css('display', 'block')
+                clearInterval(interval)
+            }
+        }, 1000)
     } else if (href.indexOf('www.elecfans.com') != -1) { // elecfans.com
         console.log("检测到电子发烧友。。。。")
         // 循环检测
@@ -643,9 +668,9 @@
 
             if($$$("a[onclick^=swapContent").length > 0){
                 // PC 版本
-                $$$(".readable >  span:nth-child(2)").attr("style","display:blocked")
+                $$$(".readable >  span:nth-child(2)").attr("style","display:block")
                 // 移动版本
-                $$$(".bookReviewBody >  span:nth-child(2)").attr("style","display:blocked")
+                $$$(".bookReviewBody >  span:nth-child(2)").attr("style","display:block")
                 $$$("a[onclick^=swapContent").attr("style","display:none")
                 clearInterval(interval)
             }

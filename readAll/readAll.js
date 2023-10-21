@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         阅读全文、自动展开全文、自动移除万恶弹框
 // @namespace    http://tampermonkey.net/
-// @version      2.17.3
+// @version      2.17.4
 // @require      https://greasyfork.org/scripts/415668-zmquery3-5-1/code/zmQuery351.js?version=866815
 // @description  【非自动关注】【自用，长期维护】【功能有】1. 阅读全文网站支持：CSDN、github.io、xz577.com、iteye.com、720ui.com、cloud.tencent.com、新浪、头条、网易新闻、腾讯新闻、51CTO、知乎、果壳科技（移动版）、awesomes.cn、javascriptcn.com、人民日报（移动版）、凤凰网、虎扑移动版、百度经验、360文档（个人图书馆）、乐居买房（移动版）、电子发烧友网（PC、移动版）、悟空问答（PC、移动版）、百家号、百度文章、简书移动版、搜狐移动版、goodreads（PC、移动版）、百度文库(移动、PC版)、36氪移动版
 // @author       zhengmingliang
@@ -19,7 +19,7 @@
 // @match        *://*.720ui.com/*
 // @match        *://*.goodreads.com/book/show/*
 // @match        *://www.wukong.com/question/*
-// @match        *://cloud.tencent.com/*
+// @match        *://cloud.tencent.com/developer/article/*
 // @match        *://m.leju.com/*
 // @match        *://*.didispace.com/*
 // @match        *://*.sina.cn/*
@@ -450,9 +450,9 @@
     } else if (href.indexOf('cloud.tencent.com') != -1) { //cloud.tencent.com
         console.log("检测到tencent。。。。")
         let interval = setInterval(function () {
-            if ($$$(".com-markdown-collpase-hide").length > 0) {
-                readAllRule1(".com-markdown-collpase-toggle", ".com-markdown-collpase-main", true)
-                readAllRule2(".com-markdown-collpase-toggle", ".com-markdown-collpase-hide", "com-markdown-collpase-hide")
+            if ($$$(".cdc-expand-area__toggle").length > 0) {
+                readAllRule1(".cdc-expand-area__toggle", ".cdc-expand-area__main", true)
+                // readAllRule2(".com-markdown-collpase-toggle", ".com-markdown-collpase-hide", "com-markdown-collpase-hide")
                 clearInterval(interval)
             }
         }, 1000)
